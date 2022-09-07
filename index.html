@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <title>Pokemon</title>
+  </head>
+
+  <body>
+    <div class="container" id="container">
+      <div class="row" id="fila" style="justify-content: center"></div>
+      <div class="row" id="buttons" style="justify-content: center"></div>
+    </div>
+    <script>
+        
+        window.onload = async () => {
+        const url = "https://pokeapi.co/api/v2/pokemon";
+        clearData();
+        const response = await fetch(url);
+        const data = await response.json();
+
+        data.results.forEach((element) => {
+          fetch(element.url)
+            .then((response) => response.json())
+            .then((data) => {
+              const title = document.createElement("h5");
+              title.setAttribute("class", "card-title");
+              const name = document.createTextNode(data.name.toUpperCase());
+              title.appendChild(name);
+
+              const text = document.createElement("p");
+              title.setAttribute("class", "card-text");
+              const list = document.createElement("ul");
+              text.appendChild(list);
+
+              data.abilities.forEach((element) => {
+                const itemList = document.createElement("li");
+                const ability = document.createTextNode(element.ability.name);
+                itemList.appendChild(ability);
+                list.appendChild(itemList);
+              });
+
+              const imagen = document.createElement("img");
+              imagen.setAttribute("class", "card-img-top");
+              imagen.setAttribute("src", data.sprites.front_default);
+
+              const cardBody = document.createElement("div");
+              cardBody.setAttribute("class", "card-body");
+              cardBody.appendChild(title);
+              cardBody.appendChild(text);
+
+              const card = document.createElement("div");
+              card.setAttribute("class", "card");
+              card.appendChild(imagen);
+              card.appendChild(cardBody);
+
+              const col = document.createElement("div");
+              col.setAttribute("class", "col-lg-3 mt-4");
+              col.setAttribute("style", "width: 18rem;");
+              col.appendChild(card);
+
+              document.getElementById("fila").appendChild(col);
+            });
+        });
+
+        if (data.previous != null) {
+          console.log("Entro if previo");
+          const btn = document.createElement("button");
+          btn.setAttribute("class", "btn btn-success m-4");
+          btn.addEventListener("click", function(){getNextOrPrevious(data.previous)});
+          const textBtn = document.createTextNode("Anterior");
+          btn.appendChild(textBtn);
+          document.getElementById("buttons").appendChild(btn);
+        }
+
+        if (data.next != null) {
+          console.log("Entro if sig");
+          const btn = document.createElement("button");
+          btn.setAttribute("class", "btn btn-success m-4");
+          btn.addEventListener("click", function(){getNextOrPrevious(data.next)});
+          const textBtn = document.createTextNode("Siguiente");
+          btn.appendChild(textBtn);
+          document.getElementById("buttons").appendChild(btn);
+        }
+      };
+
+      const getNextOrPrevious = async (url) => {
+        clearData();
+        const response = await fetch(url);
+        const data = await response.json();
+
+        data.results.forEach((element) => {
+          fetch(element.url)
+            .then((response) => response.json())
+            .then((data) => {
+              const title = document.createElement("h5");
+              title.setAttribute("class", "card-title");
+              const name = document.createTextNode(data.name.toUpperCase());
+              title.appendChild(name);
+
+              const text = document.createElement("p");
+              title.setAttribute("class", "card-text");
+              const list = document.createElement("ul");
+              text.appendChild(list);
+
+              data.abilities.forEach((element) => {
+                const itemList = document.createElement("li");
+                const ability = document.createTextNode(element.ability.name);
+                itemList.appendChild(ability);
+                list.appendChild(itemList);
+              });
+
+              const imagen = document.createElement("img");
+              imagen.setAttribute("class", "card-img-top");
+              imagen.setAttribute("src", data.sprites.front_default);
+
+              const cardBody = document.createElement("div");
+              cardBody.setAttribute("class", "card-body");
+              cardBody.appendChild(title);
+              cardBody.appendChild(text);
+
+              const card = document.createElement("div");
+              card.setAttribute("class", "card");
+              card.appendChild(imagen);
+              card.appendChild(cardBody);
+
+              const col = document.createElement("div");
+              col.setAttribute("class", "col-lg-3 mt-4");
+              col.setAttribute("style", "width: 18rem;");
+              col.appendChild(card);
+
+              document.getElementById("fila").appendChild(col);
+            });
+        });
+
+        if (data.previous != null) {
+          console.log("Entro if previo");
+          const btn = document.createElement("button");
+          btn.setAttribute("class", "btn btn-success m-4");
+          btn.addEventListener("click", function(){getNextOrPrevious(data.previous)});
+          const textBtn = document.createTextNode("Anterior");
+          btn.appendChild(textBtn);
+          document.getElementById("buttons").appendChild(btn);
+        }
+
+        if (data.next != null) {
+          console.log("Entro if sig");
+          const btn = document.createElement("button");
+          btn.setAttribute("class", "btn btn-success m-4");
+          btn.addEventListener("click", function(){getNextOrPrevious(data.next)});
+          const textBtn = document.createTextNode("Siguiente");
+          btn.appendChild(textBtn);
+          document.getElementById("buttons").appendChild(btn);
+        }
+      };
+
+      const clearData = () => {
+        const node = document.getElementById("fila");
+        while (node.firstChild) {
+          node.removeChild(node.firstChild);
+        }
+
+        const node2 = document.getElementById("buttons");
+        while (node2.firstChild) {
+          node2.removeChild(node2.firstChild);
+        }
+      };
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
